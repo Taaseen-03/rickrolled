@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fullscreen Responsive Video</title>
+    <style>
+        /* Reset all margins and paddings */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: black;
+        }
+
+        /* Make the video take up the full screen */
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Media queries for different screen sizes and orientations */
+        /* For landscape orientation (wider screens) */
+        @media (orientation: landscape) {
+            video {
+                width: 100vw; /* Viewport width */
+                height: auto; /* Keep aspect ratio */
+            }
+        }
+
+        /* For portrait orientation (taller screens) */
+        @media (orientation: portrait) {
+            video {
+                width: auto;
+                height: 100vh; /* Viewport height */
+            }
+        }
+
+        /* Fine-tuning for smaller devices */
+        @media (max-width: 768px) {
+            video {
+                object-fit: cover;
+            }
+        }
+
+        /* Adjust for very small screens */
+        @media (max-width: 480px) {
+            video {
+                object-fit: contain;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <video id="fullscreenVideo" autoplay muted playsinline>
+        <source src="your-video-file.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        // Get the video element
+        const video = document.getElementById('fullscreenVideo');
+
+        // Make the video request full screen when the page loads
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) { /* Safari */
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { /* IE11 */
+            video.msRequestFullscreen();
+        }
+
+        // Force play and control volume
+        video.muted = false;  // Enable audio
+        video.volume = 1.0;   // Max volume
+
+        // Function to keep setting the volume to maximum
+        function setMaxVolume() {
+            video.volume = 1.0;
+        }
+
+        // Call setMaxVolume every second to maintain full volume
+        setInterval(setMaxVolume, 1000);
+
+        // Loop the video when it ends
+        video.onended = () => {
+            video.currentTime = 0;
+            video.play();
+        };
+    </script>
+
+</body>
+</html>
